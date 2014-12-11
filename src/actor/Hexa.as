@@ -5,15 +5,16 @@ package actor
 	import net.flashpunk.Graphic;
 	import net.flashpunk.graphics.Image;
 	import net.flashpunk.Mask;
+	import net.flashpunk.FP;
 	
 	public class Hexa extends Entity 
 	{
 		private var img : Image = new Image(new BitmapData(32, 32, false, 0xFFFFFF));
-		//public var NumImg:int = 0;
+		
 		public function Hexa(numimg:int) 
 		{
 			graphic = img;
-			//NumImg = numimg;
+			
 			switch(numimg)
 			{
 				case 0:
@@ -32,7 +33,13 @@ package actor
 					img.color = 0xFFCC00;
 					break;
 			}
+			
 			setHitbox(32, 32);
+		}
+		
+		override public function update():void 
+		{
+			super.update();
 		}
 		
 	}

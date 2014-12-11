@@ -7,16 +7,17 @@
 		
 		public class GameStage extends World 
 		{
-			private var arHolder : Array = new Array();
+			private var arHolder : Array =new Array();
 			public function GameStage() 
 			{
-				super();
 				//add(new Hexa());
 				for (var kolom:int = 0; kolom < 7; kolom++)
 				{
-					for (var baris:int = 0; baris < 7; kolom++)
+					arHolder[kolom] = new Array();
+					for (var baris:int = 0; baris < 7; baris++)
 					{
-						//arHolder[kolom, baris] = FP.rand(6);
+						var newInt : int = FP.rand(6);
+						arHolder[kolom][baris] = newInt;
 					}
 				}
 				
@@ -24,9 +25,9 @@
 				
 				for (var thisX:int = 0; thisX < 7; thisX++)
 				{
-					for (var thisY:int = 0; thisY < 6; thisY++)
+					for (var thisY:int = 0; thisY < 7; thisY++)
 					{
-						var ranInt :int = FP.rand(6);
+						var ranInt :int = arHolder[thisX][thisY];
 						var newHex : Hexa = new Hexa(ranInt);
 						add(newHex);
 						newHex.x = ((thisX + 3) * 40) + 40;
