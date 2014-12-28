@@ -47,6 +47,7 @@ package actor
 			/*
 			if (Input.mousePressed && collidePoint(x, y,world.mouseX, world.mouseY))
 			{
+				FP.log(pForPoint.x +" " + pForPoint.y);
 				if (Global.holderInteger == -1)//  || Global.holderInteger == Global.arrayGame[pForPoint.x][pForPoint.y])
 				{
 					Global.holderInteger = Global.arrayGame[pForPoint.x][pForPoint.y] ;
@@ -58,7 +59,6 @@ package actor
 				//FP.log(Global.arrayGame[pForPoint.x][pForPoint.y]);
 				//Global.holderInteger = Global.arrayGame[pForPoint.x] 
 				//trace("a");
-				
 			}
 			if (collidePoint(x, y, world.mouseX, world.mouseY)&&Global.firstClick == true)
 			{

@@ -13,7 +13,6 @@ package room
 		private var arHolder : Array = new Array();
 		private var cekInt : int = -1;
 		private var arCollect : Array = new Array();
-		private var arHexa : Array = new Array();
 		private var oneShote : Boolean = false;
 		public function GameStage() 
 		{
@@ -42,6 +41,7 @@ package room
 					newHex.x = ((thisX + 3) * 40) + 40;
 					newHex.pForPoint.x = thisX;
 					newHex.pForPoint.y = thisY;
+					newHex.name = thisX+" "+thisY;
 					if (thisX % 2 != 1)
 					{
 						newHex.y = ((thisY+3) * 40)+10;
@@ -54,22 +54,28 @@ package room
 			}
 		}
 		
+		override public function begin():void 
+		{
+			super.begin();
+			//CekAllArray();
+		}
+		
 		override public function update():void 
 		{
 			super.update();
 			var e : Hexa = Hexa(this.collidePoint("block", mouseX, mouseY));
-			//if(Input.mousePressed && coll
 			if (e != null && Input.mousePressed)
 			{
 				//FP.log("hit with");
 				//FP.log(e.pForPoint.x + " " + e.pForPoint.y);
 				oneShote = false;
+				//CekAllArray();
 				if (cekInt == -1)
 				{
 					cekInt = arHolder[e.pForPoint.x][e.pForPoint.y];
 					e.hasPointUp = true;
 					arCollect.push(e.pForPoint.x + " " + e.pForPoint.y);
-					arHexa.push(e);
+					//arHexa.push(e);
 				}
 			}
 			else if (e != null && Input.mouseDown )
@@ -84,28 +90,33 @@ package room
 					if (cekArray(cekX, cekY, e.pForPoint.x, e.pForPoint.y) && (cekInt == tempCekInt))
 					{
 						arCollect.push(e.pForPoint.x + " " + e.pForPoint.y);
-						arHexa.push(e);
 						e.hasPointUp = true;
 					}
-					//arCollect.push(e.pForPoint.x + " " + e.pForPoint.y);
 				}
 			}
 			else if (Input.mouseReleased && oneShote==false)
 			{
 				//FP.log("first lengt " +arCollect.length);
-				if (arHexa.length > 2)
+				if (arCollect.length > 2)
 				{
-					for (var i : int = 0 ; i < arHexa.length; i++)
+					for (var i : int = 0 ; i < arCollect.length; i++)
 					{
 						//FP.log(arCollect[i]);
-						var hex : Hexa = arHexa[i] as Hexa;
+						var a: String = arCollect[i];
+						var cekforX : int = int(a.substr(0, 1));
+						var cekforY : int = int(a.substr(2, 1));
+						arHolder[cekforX][cekforY] = -1;
+						var hex : Hexa = getInstance(cekforX+" "+cekforY)as Hexa;
+						//var hex : Hexa = arHexa[i] as Hexa;
 						remove(hex);
 					}
 				}
 				oneShote = true;
 				arCollect.splice(0);
-				arHexa.splice(0);
 				cekInt = -1;
+				GoDownArray();
+				createAnotherHexa();
+				//CekAllArray();
 				//clean holder (put in -1)
 				
 				// remove hexa and replace
@@ -132,20 +143,77 @@ package room
 		
 		private function GoDownArray():void
 		{
-			for (var baris: int = 6; baris > 0; baris--)
+			for (var kolom:int = 0 ; kolom < 7; kolom++)//(var baris: int = 6; baris > 0; baris--)
 			{
-				for (var kolom:int = 0 ; kolom < 7; kolom++)
+				for (var baris: int = 6; baris > 0; baris--)
 				{
-					var bufferInt : int = arHolder[kolom][baris];
-					if (bufferInt == -1)
+					if (arHolder[kolom][baris] == -1)
 					{
-						var cekBarisAtas : int = baris - 1;
-						//while(
+						for (var cekBarisAtas : int = baris - 1; cekBarisAtas > 0; cekBarisAtas--)
+						{
+							if (arHolder[kolom][cekBarisAtas] != -1) { break;}
+						}
+						//if (cekBarisAtas == -1) break;
+						arHolder[kolom][baris] = arHolder[kolom][cekBarisAtas];
+						arHolder[kolom][cekBarisAtas] = -1;
+						
+						
+						var hex : Hexa = getInstance(kolom + " " + cekBarisAtas) as Hexa;
+						if (hex == null) continue;
+						hex.pForPoint.y = baris;
+						
+						if (kolom % 2 != 1)
+						{
+							hex.y = ((baris+3) * 40)+10;
+						}
+						else
+						{
+							hex.y = ((baris+3) * 40)-10;
+						}
+						hex.name = kolom +" " + baris;
+						
 					}
 					
 				}
 			}
 		}
 		
+		private function createAnotherHexa():void
+		{
+			for (var kolom:int = 0 ; kolom < 7; kolom++)
+			{
+				for (var baris: int = 6; baris > -1; baris--)
+				{
+					if (arHolder[kolom][baris] == -1)
+					{
+						var newInt : int = FP.rand(5);
+						arHolder[kolom][baris] = newInt;
+						var newHexa : Hexa = new Hexa(newInt);
+						add(newHexa);
+						newHexa.x = ((kolom + 3) * 40) + 40;
+						newHexa.pForPoint.x = kolom;
+						newHexa.pForPoint.y = baris;
+						newHexa.name = kolom+" "+baris;
+						if (kolom % 2 != 1)
+						{
+							newHexa.y = ((baris+3) * 40)+10;
+						}
+						else
+						{
+							newHexa.y = ((baris+3) * 40)-10;
+						}
+					}
+				}
+			}
+		}
+		
+		
+		private function CekAllArray() :void
+		{
+			for (var i : int = 0 ; i < 7; i++)
+			{
+				FP.log(arHolder[i]);
+			}
+		}
 	}// ending class
 }

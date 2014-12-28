@@ -8,7 +8,6 @@ package
 	{
 		public function Main()
 		{
-			trace("abasdsadsa");
 			super(640, 480);
 		}
 		override public function init():void 
