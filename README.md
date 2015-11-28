@@ -1,4 +1,4 @@
 LikePoko
 ========
 
-This game I made for learning, base on Pokopang
+This game I made for learning, base on Pokopang (using flashpunk)
